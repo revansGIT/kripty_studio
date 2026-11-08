@@ -1,0 +1,18 @@
+# Secrets
+atlas-credentials.env
+*.env
+!.env.example
+
+# Dependencies and build output
+node_modules/
+.next/
+
+# Local data and uploads
+backend/data/
+backend/uploads/
+
+# Local tooling
+.claude/
+.DS_Store
+Thumbs.db
+config.bat

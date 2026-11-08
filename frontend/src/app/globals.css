@@ -1,0 +1,747 @@
+@import "tailwindcss";
+
+/* Design tokens pulled from the Figma file (CP3Wo3oMxQSSLP8XqPwXFw). */
+@theme {
+  --color-page: #f6f5f6;
+  --color-ink: #0a0a0a;
+  --color-ink-2: #121214;
+  --color-muted: #8c8c8c;
+  --color-shade-04: #e0dee6;
+  --color-brand: #a100ff;
+  --color-card: #141414;
+  --color-card-2: #1a1a1a;
+  --color-card-3: #242424;
+
+  /* Gilroy is used when installed locally/self-hosted; Urbanist is the closest free fallback. */
+  --font-sans: "Gilroy", var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-marquee: marquee var(--marquee-duration, 60s) linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+@layer components {
+  /* Display heading: 74px Gilroy Bold, scales down on small screens. */
+  .display {
+    font-size: clamp(40px, 6vw, 74px);
+    font-weight: 700;
+  }
+  @media (min-width: 1280px) {
+    .display {
+      white-space: nowrap;
+    }
+  }
+
+  /* Silver gradient text used on the dark sections. */
+  .text-silver {
+    background-image: linear-gradient(90deg, #999 0%, #fff 50%, #fff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Dark glass pill ("Selected Works", "Our Services", ...). */
+  .pill-dark {
+    position: relative;
+    display: inline-flex;
+    height: 50px;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+    border-radius: 100px;
+    padding: 0 25px;
+    font-size: 18px;
+    line-height: 1;
+    color: #fff;
+    white-space: nowrap;
+    background-image: linear-gradient(180deg, rgba(224, 222, 230, 0.15), rgba(8, 8, 10, 0.15));
+    box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(25px);
+  }
+  .pill-dark::before,
+  .pill-dark::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .pill-dark::before {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-image: linear-gradient(180deg, rgba(224, 222, 230, 0.1), rgba(8, 8, 10, 0.1));
+    mix-blend-mode: color-dodge;
+  }
+  .pill-dark::after {
+    border: 1px solid #fff;
+    mix-blend-mode: overlay;
+  }
+
+  /* Light pill ("A Digital Design Agency", "GOT QUESTIONS?"). */
+  .pill-light {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 40px;
+    background: rgba(10, 10, 10, 0.1);
+    padding: 10px 14px;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--color-ink-2);
+    white-space: nowrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      filter 0.2s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .btn:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  /* Frosted light button on light background ("Book a Call", "Our Portfolio"). */
+  .btn-glass {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 16px 22px;
+    color: var(--color-ink-2);
+    background-image: linear-gradient(168deg, rgba(10, 10, 10, 0.1) 17.95%, rgba(255, 255, 255, 0.1) 82.05%);
+    box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Dark gradient button ("Let's Chat", "Start a Project"). */
+  .btn-dark {
+    padding: 17px 22px;
+    color: #fff;
+    background-image: linear-gradient(45deg, #0a0a0a 22.571%, #323232 77.429%);
+    backdrop-filter: blur(3px);
+  }
+
+  /* Light button on dark background ("See More Case Studies", "Submit Inquiry"). */
+  .btn-light {
+    gap: 6px;
+    border: 1px solid #fff;
+    padding: 16px 24px;
+    color: var(--color-ink);
+    background: var(--color-shade-04);
+    backdrop-filter: blur(3px);
+  }
+  .btn-light:hover {
+    box-shadow: 0 6px 24px rgba(255, 255, 255, 0.15);
+  }
+
+  /* Dark translucent input used in the contact + subscribe forms. */
+  .field {
+    width: 100%;
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(224, 222, 230, 0.08);
+    backdrop-filter: blur(3px);
+    font-size: 14px;
+    line-height: 1;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+    opacity: 1;
+  }
+  .field:focus {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Hero "Designs" highlight: the purple box wipes in, the word rises into it,
+   then a soft shine sweeps across and the box gently glows, on a loop. */
+.designs-wrap {
+  display: inline-block;
+  animation: designs-glow 3.6s ease-in-out 1.2s infinite;
+}
+.designs-hl {
+  position: relative;
+  display: inline-block;
+  /* "clip" crops the shine/wipe like "hidden" but, unlike it, keeps the box on the text baseline (no extra line height).
+     Browsers without "clip" fall back to "hidden". */
+  overflow: hidden;
+  overflow: clip;
+  /* Italic glyphs lean past their measured width and the heading's negative tracking trims the last letter,
+     so the right side needs more room than the left or the final letter (the "s" in "Animations") gets cut. */
+  padding: 0 0.22em 0 0.12em;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.135;
+  color: var(--color-page);
+  isolation: isolate;
+}
+.designs-hl::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-brand);
+  transform-origin: left center;
+  animation: designs-wipe 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+.designs-hl::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.45) 50%, transparent 62%);
+  transform: translateX(-120%);
+  animation: designs-shine 4.2s ease-in-out 1.4s infinite;
+  pointer-events: none;
+}
+/* The rotating word: a stage that eases its width, holding the word that flips in (and the one flipping out). */
+.rw-stage {
+  --rw-flip: 700ms;
+  position: relative;
+  display: inline-block;
+  perspective: 700px;
+  /* Finishes widening (~280ms) before the incoming word is visible, so a wider word is never clipped mid-flip. */
+  transition: width 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: designs-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+.rw-word {
+  display: inline-block;
+  white-space: nowrap;
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+}
+.rw-word.is-leaving {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: rw-out var(--rw-flip) cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+.rw-word.is-entering {
+  animation: rw-in var(--rw-flip) cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@keyframes rw-out {
+  from {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+}
+@keyframes rw-in {
+  0% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* On phones the rotating word gets its own line, so a longer word can never re-wrap the heading and shift the page. */
+@media (max-width: 639px) {
+  .designs-wrap {
+    display: block;
+    width: fit-content;
+    margin-inline: auto;
+  }
+}
+
+@keyframes designs-wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes designs-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes designs-shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  35%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+@keyframes designs-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(161, 0, 255, 0));
+  }
+  50% {
+    filter: drop-shadow(0 6px 22px rgba(161, 0, 255, 0.5));
+  }
+}
+
+/* ---- Reveal on scroll (see Reveal.tsx). Hidden state only when scripting is on and motion is allowed. ---- */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    filter: blur(6px);
+    transition:
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+      filter 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  }
+  .reveal[data-revealed="true"] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ---- Our Services ---- */
+/* Heading: a slow sheen sweeps across the silver text (the pattern repeats every half-width, so the loop is seamless). */
+.shimmer {
+  background-image: linear-gradient(100deg, #999 0%, #fff 25%, #999 50%, #fff 75%, #999 100%);
+  background-size: 200% 100%;
+  animation: shimmer 9s linear infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* Icons float gently, each out of step with its neighbours */
+.svc-float {
+  animation: svc-float 5.5s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -1.8s);
+}
+@keyframes svc-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+/* Glow ring that fires when the travelling light arrives; --arrive is set per icon (6s loop, matches Services.tsx) */
+.svc-arrive {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.45),
+    0 0 36px 10px rgba(255, 255, 255, 0.28);
+  animation: svc-arrive 6s ease-out infinite;
+  animation-delay: var(--arrive, 0s);
+}
+@keyframes svc-arrive {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  4% {
+    opacity: 0.9;
+  }
+  24%,
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+/* A small motion inside each icon */
+.svc-glyph-0 {
+  transform-origin: 50% 85%;
+  animation: svc-draw 4s ease-in-out infinite;
+}
+@keyframes svc-draw {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-8deg);
+  }
+  60% {
+    transform: rotate(6deg);
+  }
+}
+.svc-glyph-1 {
+  animation: svc-type 3.2s ease-in-out infinite;
+}
+@keyframes svc-type {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+.svc-glyph-2 {
+  animation: svc-bounce 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes svc-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  45%,
+  55% {
+    transform: translateY(-6px) scale(0.97, 1.04);
+  }
+  80% {
+    transform: translateY(0) scale(1.06, 0.94);
+  }
+}
+
+/* ---- Curtain: the dark panel rises over the hero as you scroll ----
+   --curtain is set by CurtainScroll: 0 at the top of the page, 1 once the panel has fully arrived.
+   The "scripting: enabled" block starts the page in the 0 state so there is no jump when the script loads;
+   without JavaScript nothing is transformed and the page is simply static. */
+.curtain-hero {
+  z-index: 0;
+  transform-origin: 50% 25%;
+}
+.curtain-panel {
+  transform-origin: 50% 0;
+}
+@media (scripting: enabled) {
+  .curtain-hero {
+    transform: scale(calc(1 - 0.07 * var(--curtain, 0)));
+    opacity: calc(1 - 0.5 * var(--curtain, 0));
+  }
+  .curtain-panel {
+    /* rises faster than the scroll (80px extra), widens from 95.5% to full width, and casts a soft shadow upwards */
+    transform: translate3d(0, calc((1 - var(--curtain, 0)) * 80px), 0) scale(calc(0.955 + 0.045 * var(--curtain, 0)));
+    box-shadow: 0 -30px 80px rgba(10, 10, 10, calc(0.2 * (1 - var(--curtain, 0))));
+  }
+  :root[data-curtain="active"] .curtain-panel {
+    will-change: transform;
+  }
+}
+/* The hero stays pinned so the panel slides over it like a curtain. A hero taller than the screen (phones,
+   short windows) is pinned by its bottom edge: it scrolls normally until its end is visible, then holds.
+   CurtainScroll sets --hero-pin (screen height minus hero height, never positive); until it runs, the
+   far-negative fallback keeps the hero un-pinned so none of it can get stuck out of view. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .curtain-hero {
+    position: sticky;
+    top: min(0px, var(--hero-pin, -9999px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .curtain-hero,
+  .curtain-panel {
+    transform: none;
+    opacity: 1;
+    box-shadow: none;
+  }
+  .shimmer,
+  .svc-float,
+  .svc-arrive,
+  .svc-glyph-0,
+  .svc-glyph-1,
+  .svc-glyph-2 {
+    animation: none;
+  }
+  .svc-connector {
+    display: none;
+  }
+}
+
+/* ---- "Trusted by" brand strip: slides left to right in a seamless loop ---- */
+.brand-track {
+  /* 3 copies of the row: moving by one copy (a third of the track) is invisible, so the loop never jumps. */
+  --brand-marquee-duration: 45s;
+  animation: brand-slide var(--brand-marquee-duration) linear infinite;
+  will-change: transform;
+}
+.brand-marquee:hover .brand-track {
+  animation-play-state: paused;
+}
+@keyframes brand-slide {
+  from {
+    transform: translate3d(-33.3333%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ---- Telegram chat bubble (bottom-right) ---- */
+.tg-float {
+  position: relative;
+  animation:
+    tg-enter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s both,
+    tg-float 3.4s ease-in-out 2s infinite;
+}
+.tg-btn {
+  background: linear-gradient(135deg, #46c6ff 0%, #1d96e6 55%, #0a74c9 100%);
+  box-shadow:
+    0 12px 32px rgba(0, 136, 204, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.25s ease;
+}
+.tg-btn:hover,
+.tg-btn:focus-visible {
+  transform: scale(1.1);
+  box-shadow:
+    0 16px 40px rgba(0, 136, 204, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.tg-btn:active {
+  transform: scale(0.96);
+}
+.tg-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(42, 171, 238, 0.5);
+  pointer-events: none;
+  animation: tg-ripple 2.8s ease-out 2s infinite;
+}
+.tg-ring-2 {
+  animation-delay: 3.4s;
+}
+.tg-icon {
+  transform-origin: 40% 60%;
+  animation: tg-wiggle 6s ease-in-out 3.5s infinite;
+}
+.tg-online {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 9999px;
+  background: #3ddc84;
+  border: 2.5px solid #0a74c9;
+  animation: tg-online 2s ease-in-out infinite;
+}
+.tg-online-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #3ddc84;
+  box-shadow: 0 0 0 0 rgba(61, 220, 132, 0.6);
+  animation: tg-online 2s ease-in-out infinite;
+}
+/* "Chat on Telegram" pill that slides out to the left on hover/focus */
+.tg-label {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  white-space: nowrap;
+  border-radius: 9999px;
+  background: rgba(18, 18, 20, 0.94);
+  padding: 9px 16px;
+  font-size: 14px;
+  line-height: 1;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translate(10px, -50%) scale(0.92);
+  transform-origin: right center;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tg-btn:hover .tg-label,
+.tg-btn:focus-visible .tg-label {
+  opacity: 1;
+  transform: translate(0, -50%) scale(1);
+}
+.tg-greeting {
+  transform-origin: 100% 100%;
+  animation: tg-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.tg-message {
+  animation: tg-fade-up 0.35s ease-out both;
+}
+.tg-typing {
+  display: inline-flex;
+  gap: 5px;
+  padding: 7px 0 5px;
+}
+.tg-typing i {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #8c8c8c;
+  animation: tg-bounce 1s ease-in-out infinite;
+}
+.tg-typing i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.tg-typing i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes tg-enter {
+  from {
+    opacity: 0;
+    transform: scale(0) rotate(-35deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes tg-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes tg-ripple {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+@keyframes tg-wiggle {
+  0%,
+  86%,
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  89% {
+    transform: rotate(-16deg) translate(-1px, 1px);
+  }
+  92% {
+    transform: rotate(12deg) translate(1px, -1px);
+  }
+  95% {
+    transform: rotate(-6deg);
+  }
+}
+@keyframes tg-online {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(61, 220, 132, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(61, 220, 132, 0);
+  }
+}
+@keyframes tg-pop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes tg-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes tg-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .designs-wrap,
+  .designs-hl::before,
+  .designs-hl::after,
+  .rw-stage,
+  .rw-word,
+  .tg-float,
+  .brand-track,
+  .tg-ring,
+  .tg-icon,
+  .tg-online,
+  .tg-online-dot,
+  .tg-greeting,
+  .tg-message,
+  .tg-typing i {
+    animation: none;
+    transition: none;
+  }
+  .tg-ring {
+    display: none;
+  }
+  /* Still: show the middle copy of the row, centred on screen. */
+  .brand-track {
+    transform: translate3d(-33.3333%, 0, 0);
+  }
+}
